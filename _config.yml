@@ -43,7 +43,7 @@ minima:
   social_links:
     #twitter: fastdotai
     github: DavidD003
-    youtube: "channel/UCr8HDUNoTaT2QIfLktXk3Jg"
+    youtube: "channel\/UCr8HDUNoTaT2QIfLktXk3Jg"
     #music: DavidsMusic
 
 # Set this to true to get LaTeX math equation support
