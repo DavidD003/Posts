@@ -6,7 +6,7 @@
 # https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
 # https://learnxinyminutes.com/docs/yaml/
 
-title: fastpages
+title: David
 description: Where I share my projects and thoughts.
 github_username: DavidD003
 # you can comment the below line out if your repo name is not different than your baseurl
@@ -14,7 +14,7 @@ github_repo: "Posts"
 
 # OPTIONAL: override baseurl and url if using a custom domain
 # Note: leave out the trailing / from this value. 
- url: "https://DavidD003.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://DavidD003.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 #url:"https://dde.sa"
 
 ###########################################################
