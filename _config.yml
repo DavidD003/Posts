@@ -41,9 +41,9 @@ baseurl: "/Posts" # the subpath of your site, e.g. "/blog".
 # Github and twitter are optional:
 minima:
   social_links:
-    twitter: fastdotai
+    #twitter: fastdotai
     github: DavidD003
-    youtube: DavidsCoding
+    youtube: UCr8HDUNoTaT2QIfLktXk3Jg
     #music: DavidsMusic
 
 # Set this to true to get LaTeX math equation support
