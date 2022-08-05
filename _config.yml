@@ -43,7 +43,7 @@ minima:
   social_links:
     #twitter: fastdotai
     github: DavidD003
-    youtube: "channel\/UCr8HDUNoTaT2QIfLktXk3Jg"
+    #youtube: "channel\/UCr8HDUNoTaT2QIfLktXk3Jg" Removing for now: the attempt to insert a backslash instead amkes the following result which doesn't work: channel%2FUCr8HDUNoTaT2QIfLktXk3Jg
     #music: DavidsMusic
 
 # Set this to true to get LaTeX math equation support
