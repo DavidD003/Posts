@@ -82,7 +82,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      2 min read
+      3 min read
     
 </span></p>
 
@@ -184,27 +184,56 @@ window.onload = wrap_img;
 <h2 id="Codebase">
 <a class="anchor" href="#Codebase" aria-hidden="true"><span class="octicon octicon-link"></span></a>Codebase<a class="anchor-link" href="#Codebase"> </a>
 </h2>
-<p>Maybe not the right but anyways.. Using Gradio hosted via HFS for making a python algorithm available with easy integration of inputs and outputs. Pandas Dataframe will provide the main input/output modality, as Gradio allows for copying/pasting from spreadsheet</p>
-<p>Quick ideas:</p>
-<ul>
-<li>
-<p>Can't paste to data frame :(</p>
-</li>
-<li>
-<p>Will have to upload CSV with tables via file upload</p>
-</li>
-<li>
-<p>generate dataframe from CSV (output it within gradio to double check it?)</p>
-</li>
-<li>
-<p>Try to set up dataframes and the way they are drawn on in such a way that minimal changes need to be added/removed from existing tables structure.</p>
-</li>
-</ul>
-<p>-Feature design... can reference existing columns to determine columns that aren't existing. e.g. probationary if refusals is 10K+? temp if esniority column is hire date? And then modularity in functions everywhere.. e.g. seniority comparison function that takes in EEtype to deterine comparison modality?</p>
+<p>Using Gradio hosted via HFS for making a python algorithm available with easy integration of inputs and outputs. At first blush I thought that Pandas DataFrames would be the best input mode for tabular data, but ruled that out when HFS didn't allow for bulk copying and pasting. Maybe that was for the best because this pushed me to figure out how to work with the generic File input/output mode. It might be a little more painful to program (have to define methods to identify the right tables within the excel file), but a lot nice on the end user experience (drag and drop relevant files and go!). I was concerned about the extra steps of processing the excel file, but as with everything Python there is a library for that! Here is my proof of concept for File manipulation:</p>
 
 </div>
 </div>
 </div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">gradio</span> <span class="k">as</span> <span class="nn">gr</span>
+<span class="kn">import</span> <span class="nn">openpyxl</span> <span class="k">as</span> <span class="nn">pyxl</span> <span class="c1">#openPyXl allows for excel file manipulation in python</span>
+
+<span class="k">def</span> <span class="nf">myFunction</span><span class="p">(</span><span class="n">fl</span><span class="p">,</span><span class="n">txt</span><span class="p">):</span>
+    <span class="n">myWb</span><span class="o">=</span><span class="n">pyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="n">fl</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="c1">#Load excel file</span>
+    <span class="n">tab</span> <span class="o">=</span> <span class="n">pyxl</span><span class="o">.</span><span class="n">worksheet</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="n">displayName</span><span class="o">=</span><span class="s2">"Table3"</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="s2">"E1:F5"</span><span class="p">)</span> <span class="c1">#Define new table</span>
+    <span class="n">style</span> <span class="o">=</span> <span class="n">pyxl</span><span class="o">.</span><span class="n">worksheet</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">TableStyleInfo</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"TableStyleMedium9"</span><span class="p">,</span><span class="n">showRowStripes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">showColumnStripes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">tab</span><span class="o">.</span><span class="n">tableStyleInfo</span> <span class="o">=</span> <span class="n">style</span> <span class="c1">#Assign style to table</span>
+    <span class="n">ws</span><span class="o">=</span><span class="n">myWb</span><span class="o">.</span><span class="n">active</span> 
+    <span class="n">ws</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span> <span class="c1">#Add defined table to sheet within the loaded workbook</span>
+    <span class="n">otpt_fl_name</span><span class="o">=</span><span class="s1">'try.xlsx'</span> 
+    <span class="n">myWb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">otpt_fl_name</span><span class="p">)</span> <span class="c1">#Save file</span>
+    <span class="k">return</span> <span class="n">otpt_fl_name</span> <span class="c1">#Define output for HFS interface</span>
+
+<span class="n">demo</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Interface</span><span class="p">(</span>
+    <span class="n">myFunction</span><span class="p">,</span> <span class="c1">#Func to take in file and text</span>
+    <span class="p">[</span>
+        <span class="n">gr</span><span class="o">.</span><span class="n">File</span><span class="p">(</span>
+        <span class="p">),</span>
+        <span class="n">gr</span><span class="o">.</span><span class="n">Textbox</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">"Initial text"</span><span class="p">,</span>
+            <span class="n">lines</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="s2">"The quick brown fox jumped over the lazy dogs."</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">gr</span><span class="o">.</span><span class="n">File</span><span class="p">(),</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">"Enter refusal files"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">demo</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
 </div>
 
 
