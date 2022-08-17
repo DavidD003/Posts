@@ -82,7 +82,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      3 min read
+      4 min read
     
 </span></p>
 
@@ -137,7 +137,12 @@ window.onload = wrap_img;
 </li>
 <li class="toc-entry toc-h1"><a href="#Solution">Solution </a>
 <ul>
-<li class="toc-entry toc-h2"><a href="#Codebase">Codebase </a></li>
+<li class="toc-entry toc-h2"><a href="#Codebase">Codebase </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#File-Manipulation">File Manipulation </a></li>
+<li class="toc-entry toc-h3"><a href="#Retrieving-Disparate-Tables">Retrieving Disparate Tables </a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul><!--
@@ -184,7 +189,11 @@ window.onload = wrap_img;
 <h2 id="Codebase">
 <a class="anchor" href="#Codebase" aria-hidden="true"><span class="octicon octicon-link"></span></a>Codebase<a class="anchor-link" href="#Codebase"> </a>
 </h2>
-<p>Using Gradio hosted via HFS for making a python algorithm available with easy integration of inputs and outputs. At first blush I thought that Pandas DataFrames would be the best input mode for tabular data, but ruled that out when HFS didn't allow for bulk copying and pasting. Maybe that was for the best because this pushed me to figure out how to work with the generic File input/output mode. It might be a little more painful to program (have to define methods to identify the right tables within the excel file), but a lot nice on the end user experience (drag and drop relevant files and go!). I was concerned about the extra steps of processing the excel file, but as with everything Python there is a library for that! Here is my proof of concept for File manipulation:</p>
+<p>Using Gradio hosted via HFS for making a python algorithm available with easy integration of inputs and outputs. At first blush I thought that Pandas DataFrames would be the best input mode for tabular data, but ruled that out when HFS didn't allow for bulk copying and pasting. Maybe that was for the best because this pushed me to figure out how to work with the generic File input/output mode. It might be a little more painful to program (have to define methods to identify the right tables within the excel file), but a lot nice on the end user experience (drag and drop relevant files and go!). I was concerned about the extra steps of processing the excel file, but as with everything Python there is a library for that! I started off with some basic tests to ensure that what I wanted/needed to do was possible.</p>
+<h3 id="File-Manipulation">
+<a class="anchor" href="#File-Manipulation" aria-hidden="true"><span class="octicon octicon-link"></span></a>File Manipulation<a class="anchor-link" href="#File-Manipulation"> </a>
+</h3>
+<p>Here is my proof of concept for File manipulation. If copied into an empty Gradio space on HFS, it takes in an excel file, and adds a new table to the spreadsheet. This was all i needed to know that this could be done...</p>
 
 </div>
 </div>
@@ -225,6 +234,38 @@ window.onload = wrap_img;
     <span class="n">description</span><span class="o">=</span><span class="s2">"Enter refusal files"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">demo</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Retrieving-Disparate-Tables">
+<a class="anchor" href="#Retrieving-Disparate-Tables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Retrieving Disparate Tables<a class="anchor-link" href="#Retrieving-Disparate-Tables"> </a>
+</h3>
+<p>As mentioned previously, one challenge would be to pull data from tables scattered in an unpredictable way throughout the sheet. Here I had to remember that sometimes the easiest way to rob a bank is through the front door, not trying to break through the wall... I simply changed the existing excel template files (filled in by end user) so that the data tables were actually defined as 'Tables' by excel... this made them reference-able by the openPyXl tools. Some further data type transformations were required. Example with a blank book containing a trivial data table called 'tstTbl' in Excel:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">openpyxl</span> <span class="k">as</span> <span class="nn">pyxl</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">myWb</span><span class="o">=</span><span class="n">pyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="s1">'/images/Other_Files/TblTestBook.xlsx'</span><span class="p">)</span>
+<span class="n">myWb</span><span class="p">[</span><span class="s1">'Sheet1'</span><span class="p">]</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="s1">'tstTbl'</span><span class="p">]</span> <span class="c1">#Pull out table</span>
 </pre></div>
 
     </div>
