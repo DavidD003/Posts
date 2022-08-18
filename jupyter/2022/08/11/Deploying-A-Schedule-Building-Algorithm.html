@@ -82,7 +82,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      6 min read
+      7 min read
     
 </span></p>
 
@@ -394,7 +394,6 @@ Table cells reference is "C18:D22":
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">ws</span><span class="o">=</span><span class="n">myWb</span><span class="p">[</span><span class="s1">'Arb_Tbl'</span><span class="p">]</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-<span class="n">val_df</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">df</span> <span class="o">!=</span> <span class="kc">None</span> <span class="p">]</span>
 <span class="n">df</span>
 </pre></div>
 
@@ -525,6 +524,160 @@ Table cells reference is "C18:D22":
     </tr>
     <tr>
       <th>7</th>
+      <td>Tim Tin</td>
+      <td>4</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Above we can see the loose table in the wild... ws.values pulls the whole sheet, which would be good, except it grabs formulas. Unfortunately, per the docs, openPyXl will never evaluate formulas! Time to work smart, not hard. I choose to simply use the 'mouse wriggle' technique shared at this webpage ( <a href="https://trumpexcel.com/convert-formulas-to-values-excel/">https://trumpexcel.com/convert-formulas-to-values-excel/</a> ) to manually convert formulas to values before passing my workbook into my functions. Though it <em>is</em> sad that the user experience won't be as smooth as dragging and dropping files.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">myWb</span><span class="o">=</span><span class="n">pyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="s1">'../images/Other_Files/TblTestBook.xlsx'</span><span class="p">)</span> 
+<span class="c1">#1st find bottom row with data</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">200</span><span class="p">):</span> <span class="c1">#Loop up to arbitrary number, prefer to have defined end for infinte loop stopgap</span>
+    <span class="n">ref</span><span class="o">=</span><span class="s2">"C"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
+    <span class="k">if</span> <span class="n">ws</span><span class="p">[</span><span class="n">ref</span><span class="p">]</span><span class="o">.</span><span class="n">internal_value</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> 
+        <span class="c1">#Condition met when end of data found.</span>
+        <span class="n">btmRow</span><span class="o">=</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span>
+        <span class="k">break</span>
+<span class="n">tab</span><span class="o">=</span><span class="p">[[</span><span class="n">x</span><span class="o">.</span><span class="n">internal_value</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">ws</span><span class="p">[</span><span class="s1">'A3:I'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">btmRow</span><span class="p">)]]</span>
+<span class="n">df_IdNameHours</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span> <span class="c1">#Assuming column I is end of useful data</span>
+<span class="n">df_IdNameHours</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Name</td>
+      <td>id</td>
+      <td>Attr1</td>
+      <td>Attr2</td>
+      <td>Attr3</td>
+      <td>Attr4</td>
+      <td>Attr5</td>
+      <td>Attr6</td>
+      <td>Attr7</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Bob Back</td>
+      <td>0</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Jeff Jahl</td>
+      <td>1</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Hodge Hoss</td>
+      <td>2</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Kev Kroll</td>
+      <td>3</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+      <td>=RAND()*5</td>
+    </tr>
+    <tr>
+      <th>5</th>
       <td>Tim Tin</td>
       <td>4</td>
       <td>=RAND()*5</td>
