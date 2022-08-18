@@ -562,17 +562,18 @@ Table cells reference is "C18:D22":
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">myWb</span><span class="o">=</span><span class="n">pyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="s1">'../images/Other_Files/TblTestBook.xlsx'</span><span class="p">)</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">myWb</span><span class="o">=</span><span class="n">pyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="s1">'../images/Other_Files/TblAsValues.xlsx'</span><span class="p">)</span> 
+<span class="n">ws</span><span class="o">=</span><span class="n">myWb</span><span class="p">[</span><span class="s1">'Arb_Tbl'</span><span class="p">]</span>
 <span class="c1">#1st find bottom row with data</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">200</span><span class="p">):</span> <span class="c1">#Loop up to arbitrary number, prefer to have defined end for infinte loop stopgap</span>
-    <span class="n">ref</span><span class="o">=</span><span class="s2">"C"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
+    <span class="n">ref</span><span class="o">=</span><span class="s2">"A"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
     <span class="k">if</span> <span class="n">ws</span><span class="p">[</span><span class="n">ref</span><span class="p">]</span><span class="o">.</span><span class="n">internal_value</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> 
         <span class="c1">#Condition met when end of data found.</span>
         <span class="n">btmRow</span><span class="o">=</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span>
         <span class="k">break</span>
 <span class="n">tab</span><span class="o">=</span><span class="p">[[</span><span class="n">x</span><span class="o">.</span><span class="n">internal_value</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">ws</span><span class="p">[</span><span class="s1">'A3:I'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">btmRow</span><span class="p">)]]</span>
 <span class="n">df_IdNameHours</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span> <span class="c1">#Assuming column I is end of useful data</span>
-<span class="n">df_IdNameHours</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_IdNameHours</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -584,115 +585,24 @@ Table cells reference is "C18:D22":
 
 <div class="output_area">
 
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>            0   1         2         3         4         5         6         7  \
+0        Name  id     Attr1     Attr2     Attr3     Attr4     Attr5     Attr6   
+1    Bob Back   0  0.666338  0.778057  4.822291  1.632892  2.374052  2.922761   
+2   Jeff Jahl   1  3.865002  4.639129  4.989458  3.552441  0.809309   0.61727   
+3  Hodge Hoss   2  3.088418  0.360548  0.416228  1.700045  3.059734  0.443541   
+4   Kev Kroll   3  3.466984  3.967881  2.390047   0.40636   4.68963  0.376537   
+5     Tim Tin   4  2.910975  1.203692  0.146427  1.411585  0.963408  0.467773   
 
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>0</th>
-      <th>1</th>
-      <th>2</th>
-      <th>3</th>
-      <th>4</th>
-      <th>5</th>
-      <th>6</th>
-      <th>7</th>
-      <th>8</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Name</td>
-      <td>id</td>
-      <td>Attr1</td>
-      <td>Attr2</td>
-      <td>Attr3</td>
-      <td>Attr4</td>
-      <td>Attr5</td>
-      <td>Attr6</td>
-      <td>Attr7</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Bob Back</td>
-      <td>0</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Jeff Jahl</td>
-      <td>1</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Hodge Hoss</td>
-      <td>2</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Kev Kroll</td>
-      <td>3</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>Tim Tin</td>
-      <td>4</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-      <td>=RAND()*5</td>
-    </tr>
-  </tbody>
-</table>
+          8  
+0     Attr7  
+1   3.91101  
+2  4.264042  
+3  4.720742  
+4  1.797408  
+5  0.369525  
+</pre>
 </div>
-</div>
-
 </div>
 
 </div>
