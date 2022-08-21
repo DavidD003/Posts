@@ -82,7 +82,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      9 min read
+      20 min read
     
 </span></p>
 
@@ -137,10 +137,21 @@ window.onload = wrap_img;
 </li>
 <li class="toc-entry toc-h1"><a href="#Solution">Solution </a>
 <ul>
+<li class="toc-entry toc-h2"><a href="#Features">Features </a></li>
 <li class="toc-entry toc-h2"><a href="#Codebase">Codebase </a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#File-Manipulation">File Manipulation </a></li>
 <li class="toc-entry toc-h3"><a href="#Retrieving-Disparate-Tables">Retrieving Disparate Tables </a></li>
+<li class="toc-entry toc-h3"><a href="#Algorithm-Structure">Algorithm Structure </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Preliminary-Brainstorm">Preliminary Brainstorm </a></li>
+<li class="toc-entry toc-h4"><a href="#V1">V1 </a></li>
+<li class="toc-entry toc-h4"><a href="#Focusing-on-Simple">Focusing on Simple </a></li>
+<li class="toc-entry toc-h4"><a href="#Exploring-Problems">Exploring Problems </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="##"># </a></li>
+<li class="toc-entry toc-h3"><a href="#Data-Structure">Data Structure </a></li>
 </ul>
 </li>
 </ul>
@@ -160,14 +171,22 @@ window.onload = wrap_img;
 <h1 id="Context">
 <a class="anchor" href="#Context" aria-hidden="true"><span class="octicon octicon-link"></span></a>Context<a class="anchor-link" href="#Context"> </a>
 </h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Goal">
 <a class="anchor" href="#Goal" aria-hidden="true"><span class="octicon octicon-link"></span></a>Goal<a class="anchor-link" href="#Goal"> </a>
 </h2>
 <p>Deploy an algorithm for schedulers to use that is:</p>
-<p>-easy to use and learn</p>
-<p>-transparent</p>
-<p>-quick</p>
-<p>-flexible</p>
+<ul>
+<li>easy to use and learn</li>
+<li>transparent</li>
+<li>quick</li>
+<li>flexible</li>
+</ul>
 <h2 id="Motivation">
 <a class="anchor" href="#Motivation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Motivation<a class="anchor-link" href="#Motivation"> </a>
 </h2>
@@ -176,9 +195,11 @@ window.onload = wrap_img;
 <a class="anchor" href="#Challenges" aria-hidden="true"><span class="octicon octicon-link"></span></a>Challenges<a class="anchor-link" href="#Challenges"> </a>
 </h2>
 <p>-Data being manually entered in a variety of formats or not available in machine readable form. (e.g. total hours, employee type, employee availability, individualized job restrictions, outlier reasons for non-eligibility such as consecutive days worked) This is probably the main challenge!!</p>
-<p>-Algorithm ambiguity. The collective agreement defines the constraints that each assignment decision is subject to, but doesn't strictly specify all aspects, allowing for arbitrary choice on schedulers part</p>
-<p>-Many esoteric rules and edge cases around assignments being valid or not, which are also subject to change at time of contract renegotiation.</p>
-<p>-Usability. The deployment must be available to all schedulers, and have a very low barrier to entry w.r.t. training and usability.</p>
+<ul>
+<li>Algorithm ambiguity. The collective agreement defines the constraints that each assignment decision is subject to, but doesn't strictly specify all aspects, allowing for arbitrary choice on schedulers part</li>
+<li>Many esoteric rules and edge cases around assignments being valid or not, which are also subject to change at time of contract renegotiation.</li>
+<li>Usability. The deployment must be available to all schedulers, and have a very low barrier to entry w.r.t. training and usability.</li>
+</ul>
 <h2 id="A-Bit-of-Lore">
 <a class="anchor" href="#A-Bit-of-Lore" aria-hidden="true"><span class="octicon octicon-link"></span></a>A Bit of Lore<a class="anchor-link" href="#A-Bit-of-Lore"> </a>
 </h2>
@@ -186,6 +207,10 @@ window.onload = wrap_img;
 <h1 id="Solution">
 <a class="anchor" href="#Solution" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solution<a class="anchor-link" href="#Solution"> </a>
 </h1>
+<h2 id="Features">
+<a class="anchor" href="#Features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features<a class="anchor-link" href="#Features"> </a>
+</h2>
+<p>The program should take in various required inputs and return a completed weekend staffing schedule, with a separate text output with the sequence of assignments made. Facilitated by the Blocks functionality within Gradio/HFS will be the possibility of feeding in an assignment number and returning a partially completed schedule at that step.</p>
 <h2 id="Codebase">
 <a class="anchor" href="#Codebase" aria-hidden="true"><span class="octicon octicon-link"></span></a>Codebase<a class="anchor-link" href="#Codebase"> </a>
 </h2>
@@ -249,6 +274,12 @@ window.onload = wrap_img;
 <h3 id="Retrieving-Disparate-Tables">
 <a class="anchor" href="#Retrieving-Disparate-Tables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Retrieving Disparate Tables<a class="anchor-link" href="#Retrieving-Disparate-Tables"> </a>
 </h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>As mentioned previously, one challenge would be to pull data from tables scattered in an unpredictable way throughout the sheet. Here I had to remember that sometimes the easiest way to rob a bank is through the front door, not trying to break through the wall... I simply changed the existing excel template files (filled in by end user) so that the data tables were actually defined as 'Tables' by excel... this made them reference-able by the openPyXl tools. Some further data type transformations were required. Example with a blank book containing a trivial data table called 'tstTbl' in Excel:</p>
 
 </div>
@@ -549,7 +580,7 @@ Table cells reference is "A9":
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Above we can see the loose table in the wild... ws.values pulls the whole sheet, which would be good, except it grabs formulas. Unfortunately, per the docs, openPyXl will never evaluate formulas! Time to work smart, not hard. I choose to simply use the 'mouse wriggle' technique shared at this webpage ( <a href="https://trumpexcel.com/convert-formulas-to-values-excel/">https://trumpexcel.com/convert-formulas-to-values-excel/</a> ) to manually convert formulas to values before passing my workbook into my functions. Though it <em>is</em> sad that the user experience won't be as smooth as dragging and dropping files.</p>
+<p>Above we can see the loose table in the wild... ws.values pulls the whole sheet, which would be good, except it grabs formulas. Unfortunately, per the docs, openPyXl will never evaluate formulas! Time to work smart, not hard. I choose to simply use the 'mouse wriggle' technique shared at <a href="https://trumpexcel.com/convert-formulas-to-values-excel/">this webpage</a> to manually convert formulas to values before passing my workbook into my functions. Though it <em>is</em> sad that the user experience won't be as smooth as dragging and dropping files.</p>
 
 </div>
 </div>
@@ -672,6 +703,189 @@ Table cells reference is "A9":
 </div>
 </div>
 
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Algorithm-Structure">
+<a class="anchor" href="#Algorithm-Structure" aria-hidden="true"><span class="octicon octicon-link"></span></a>Algorithm Structure<a class="anchor-link" href="#Algorithm-Structure"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The preceding section is all about just getting the data we need into our hands in a readily manipulable format. Now the fun begins!</p>
+<p>The following is the process to be carried out in progressively greater detail.. a fun exercise in breaking a larger problem into sub-problems until a programmable level is reached...</p>
+<ol>
+<li>Assign individual to a timeslot</li>
+<li>Repeat until all slots filled</li>
+</ol>
+<p>That's accurate but useless to make anything happening... I've been thinking about the problem for a while and can list off design questions and answers I've reached pre-development.</p>
+<h4 id="Preliminary-Brainstorm">
+<a class="anchor" href="#Preliminary-Brainstorm" aria-hidden="true"><span class="octicon octicon-link"></span></a>Preliminary Brainstorm<a class="anchor-link" href="#Preliminary-Brainstorm"> </a>
+</h4>
+<ul>
+<li>Which timeslot/job combination should be assigned when multiple are available?<ul>
+<li>Based on <a href="https://www.youtube.com/watch?v=d1KyYyLmGpA">this video</a> I learned that to have the best algorithm performance for this kind of problem, you want to perform a depth-first search where you make assignments to the most constrained variables first. From the perspective of assigning timeslots to staff, the sequence in which staff are assigned slots is not optional within the Collective Agreement. With a change in perspective, however, one can see this problem as that of assigning staff to timeslots. From this perspective, a single staff person has a subset of timelsots for which they are eligible to work. Within that subset, this heuristic of assigning to the most constrained slot can be applied. My idea is to maintain a tracking of how many eligible people there are for each job/timeslot combination in the voluntary or forced category, and always assigning people to slots for which they are eligible, for which the fewest people are available. I do have some concerns about whether or not it will work without further consideration as described in the video. Namely, the process of removing assignments from consideration which would leave no assignment available for downstream decisions. I will forgo further worrying about the problem for the time being since I think my problem case is sufficiently different from the one explored in the video. In this situation, it is acceptable and possible that a staff person with priority over another not be assigned, based on their voluntary hours and/or training.</li>
+</ul>
+</li>
+<li>How can eligibility criteria for timeslots be made flexible so that the program is useful even after a change to the CBA?<ul>
+<li>My solution to the problem of varied esoteric constraints that are difficult to define, and for which the supplementary data to test constraint criteria is not available, is to ignore these constraints in decision making within the algorithm, instead allowing the user to address these constraints by passing in a lit of enforced assertion statements to enforce some assignments, or disallow other assignments.</li>
+<li>My solution to the problem of decision making criteria needing to be transparent and easily modifiable is to have the eligibility criteria for assignments be passed as an input to the system within a file (i.e. python module with functions defined within that will determine assignment eligibility)</li>
+</ul>
+</li>
+<li>How can the time slots be represented in if every weekend has different jobs to fill?<ul>
+<li>Again, the idea is to use a file that will be the same most of the time to provide the time slots to be filled as an input to the program</li>
+</ul>
+</li>
+<li>How can the algorithm be proofread by a human user to ensure results are valid?<ul>
+<li>It is a distributed process. Each staff person is responsible for communicating if they have been assigned to a slot that they are not eligible for. If the schedulign teams recieves this feedback, or if in schedule review they identify an assignment that seems to be contrary to policy, the program should be able to provide a step by step list of the assignments that were made, as well as being able to visualize a partially done schedule, at an arbitrarily selected step, to give the human scheduler the information required to validate if a generated schedule was valid or not, or if a new assertion should be entered into the input to prevent an invalid assignment from being made.     <ul>
+<li>Assertion Types:<ul>
+<li>Do Not Staff: DNS( slot )</li>
+<li>Assign: A( eeid, slot, job, Type)<ul>
+<li>Type can be WWF, Voluntary, or Forced</li>
+</ul>
+</li>
+<li>Disallow Assignment: N( eeid, slot, optional job )</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>While in an ideal world, back tracking could be used so as not to recompute an entire schedule after a new assertion is made, the details of implementation would be very complex, and the reduction in computation time and energy would likely not be worth it, so we'll forgo that for now.</p>
+<h4 id="V1">
+<a class="anchor" href="#V1" aria-hidden="true"><span class="octicon octicon-link"></span></a>V1<a class="anchor-link" href="#V1"> </a>
+</h4>
+<p>With these ideas in mind, the algorithm becomes:</p>
+<ul>
+<li>Review assertion list and make all prescribed assignments (such as dedicated weekend staff)</li>
+<li>Iterate through staff in sequence defined by CBA<ul>
+<li>Apply eligibility constraint functions to timeslots to generate subset of eligible slots. If none, go to next staff person. If one, assign. If multiple, evaluate to see which is most constrained and assign to that.<ul>
+<li>Default constraint functions, applied in sequence of most to least constraining:<ol>
+<li>trained on job</li>
+<li>volunteered for slot</li>
+<li>minimum 8 hours off between shifts</li>
+<li>&lt;60 total hours worked in week<ul>
+<li>On a long weekend, assuming 32 hours worked going into weekend</li>
+</ul>
+</li>
+<li>max 12 total hours worked consecutively</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>If slots remain after all staff are iterated through, then:<ul>
+<li>Iterate through all staff from least to most senior, applying modified constraints to determine who must be forced:<ol>
+<li>trained on job</li>
+<li>less than 48 hours worked in the week</li>
+<li>less than 8 hours forced</li>
+<li>minimum 12 hours off between shifts</li>
+<li>&lt;60 total hours worked in week</li>
+<li>max 12 total hours worked consecutively</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p>If in the end there is no one available for forcing, then the scheduling team will have to determine whether or not would most likely decide to change which slots are being assigned to move that gap to a different role for which a gap can be sustained in production circumstances. That would be another item to add to the assertion list.</p>
+<h4 id="Focusing-on-Simple">
+<a class="anchor" href="#Focusing-on-Simple" aria-hidden="true"><span class="octicon octicon-link"></span></a>Focusing on Simple<a class="anchor-link" href="#Focusing-on-Simple"> </a>
+</h4>
+<p>While the above algorithm is what is prescribed by the collective agreement, the rules also state that a given employee has priority selection over another corresponding to which shift they were staffed in the week prior. Carrying out the above algorithm would result in lots of folks being assigned to a shift they volunteered for but don't have first dibs on; for example the most common preference is day shift but only 1/3 staff were on day shift at a given time. Following the algorithm as initially defined then would lead to significant computational efficiency and the need for more complicated programming to create a cascading/recursive bump management script whereby if someone were assigned to a shift they don't have priority selection for and it turns out another person has rights to it, the former would be removed, and, since their already being assigned implies they had greater priority to recieve any assignment in general, another slot would have to be sought for them, including slots taken by someone with lesser priority.. and so on. For this reason the actual algorithm is modified to eliminate the need for backtracking (this is analogous to the actual process carried out manually at this time): Instead of iterating through staff in sequence determined by CBA (# of hours), create a separate list of staff, separated by crew and employment type. Carry out the above simple algorithm on each subset of these with the corresponding reduced set of avialable slots each time.</p>
+<p>Summarized:</p>
+<ul>
+<li>Carry out above algorithm with on-shift full-timers, for each shift (C/A/B) (in existing data input format, probationaries are included in FT list)</li>
+<li>Carry out above algorithm with off-shift full-timers, for each shift (C/A/B) (following the C-&gt;A-&gt;B-&gt;C-&gt;A priority selection format)</li>
+<li>Carry out above algorithm with on-shift Temp staff, for each shift (C/A/B)</li>
+<li>Carry out above algorithm with off-shift Temp staff, for each shift (C/A/B)</li>
+</ul>
+<p>To conclude, the outer most loop is across the different sets of staff groups, and then the inner loop is across shifts. And once again, this is done so that there should never be a situation where an individual is being bumped out of their slot by another later in the assignment process, simplifying the program implementation overall.</p>
+<h4 id="Exploring-Problems">
+<a class="anchor" href="#Exploring-Problems" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exploring Problems<a class="anchor-link" href="#Exploring-Problems"> </a>
+</h4>
+<p>A problem that comes to mind. Postulate: the 'most constrained first' assignment heuristic, as defined, could generate a schedule structure where someone is passed over for a slot because of the minimum shift gap constraint, when a different valid assignment earlier would ahve created the possibility of a longer contiguous shift, which in fact is what should happen.</p>
+<p>Example:
+Worker A is interested in working an 8 hour shift between 7a and 7p and their priority is daytime (7a-3p). Worker B is interested in working 4 hours between 7a and 3p and their priority is daytime (7a-3p). Higher priority individual B due to the 'most-constrained first' assignment heuristic may be assigned the 11a-3p slot, leaving A to be assigned either the 7a-3p, or 3p-7p slot. The problem is that if B were assigned the first slot of the day, the following two slots could both be covered by A, preventing the need to force anyone for the 4 hour gap posed by the former arrangement.</p>
+<p>The question is whether or not the postulate/thought experiment bears out... further thoughts required; in this situation where forcing would be required, that would imply that no one else was available to fill the slots. Looking at the most-constrained heuristic in greater detail, this would mean that when B is assigned, slot 1 and 2 are both tied for 2 potential assignees (A or B), whereas slot is most constrained with 1 potential assignee, A. It seems to me that this is a scenario I could leave under the umbrella of 'manual review + assignments' but my gut tells me that is instead a problem of providing decision criteria for when there is a tie in the 'most constrained' heuristic between slots. Proceeding with this, it seems obvious to me from the example thought experiment that the criteria should then be a comparison on the number of potential assignees for the slots neighbouring to the one being considered. The challenge in circumventing this is in creating a decision criteria where the cure isn't worse than the diease in terms of code implementation... The central challenge fo teh entire scheduling problem looms large in this small decision case, which is that the state that assignment variables will take later in the process can't be known except by carrying out the whole process to get there. The idea that leads me to is to check for a shift-splitting situation as described. That can be done simply by checking, for each assignment slot, if the neighbouring slots each have only one and the same potential assignee. If both available slots have this criteria, then the fact of which slot comes first can arbitrarily be used to break the tie... This is because when it comes down to brass tacks, that individual B is entitled to their OT selection in that scenario even if it forces that shift split and leads to someone being forced, or a gap. The problem of a gap can be addressed outside the context of the program.</p>
+<h3 id="#">
+<a class="anchor" href="##" aria-hidden="true"><span class="octicon octicon-link"></span></a>#<a class="anchor-link" href="##"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Data-Structure">
+<a class="anchor" href="#Data-Structure" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Structure<a class="anchor-link" href="#Data-Structure"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To make the program easy to maintain, debug, and code, the data structure of classes/objects/attributes and their relationships should be carefully constructed to facilitate the intended actions. My goal is to have a rigorously modular/generalized system, where almost every process in the final algorithm is a method on an object. This will make the code readable, flexible, and easier to debug in development and deployment. With the above algorithm in mind, I made a dummy script to let inuition guide the insight as to necessity of what classes/attributes/methods would be required:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>CollectData():
+    pullTables()  # Per code in above sections
+    configData()  # Define timeslots objects, worker objects, collections of workers per shift/type
+S=Sched(date)
+Sched.preFill() # Iterate through &amp; enact prescribed assignments
+Sched.Fill():
+    for shift in (SunC,SunA,SunB,Sat)</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Schedule</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">slots</span><span class="p">):</span>
+        <span class="c1">#self.Slots=   #A collection of Slot objects that compose this schedule</span>
+        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">opnSlt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""Returns a collection of all unassigned slots in this schedule,"""</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">preFill</span><span class="p">():</span>
+        <span class="sd">"""Enter all predefined assignments into the schedule"""</span>
+        
+
+<span class="k">class</span> <span class="nc">Slot</span><span class="p">():</span>
+    <span class="sd">"""A single 4 hour time slot for a single job, to be filled by 1 person"""</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">seq</span><span class="p">,</span><span class="n">dispNm</span><span class="p">,</span><span class="n">trnNm</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trnNm</span><span class="o">=</span><span class="n">trnNm</span> <span class="c1">#to be used when filtering out staff for training</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dispNm</span><span class="o">=</span><span class="n">dispNm</span> <span class="c1">#to be used for printouts</span>
+        <span class="c1">#self.datetime=   #Determined based on seq. Used in printout of assignments</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eeid</span><span class="o">=</span><span class="kc">None</span> <span class="c1">#To store eeid of assignee for printout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sLen</span>
+        
+</pre></div>
+
+    </div>
 </div>
 </div>
 
