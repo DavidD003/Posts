@@ -82,7 +82,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      26 min read
+      29 min read
     
 </span></p>
 
@@ -145,6 +145,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#Algorithm-Structure">Algorithm Structure </a>
 <ul>
 <li class="toc-entry toc-h4"><a href="#Preliminary-Brainstorm">Preliminary Brainstorm </a></li>
+<li class="toc-entry toc-h4"><a href="#Back-Tracking">Back Tracking </a></li>
 <li class="toc-entry toc-h4"><a href="#V1">V1 </a></li>
 <li class="toc-entry toc-h4"><a href="#Focusing-on-Simple">Focusing on Simple </a></li>
 <li class="toc-entry toc-h4"><a href="#Exploring-Problems">Exploring Problems </a></li>
@@ -728,9 +729,9 @@ Table cells reference is "A9":
 <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">'''CREATE TABLE IF NOT EXISTS stocks (date text, trans text, symbol text, qty, price)'''</span><span class="p">)</span> <span class="c1"># Create table.</span>
 <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">'''DELETE FROM stocks'''</span><span class="p">)</span> <span class="c1">#if table already existed, will have data... delete existing data to refresh with new.</span>
-<span class="n">purchases</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'2006-03-28'</span><span class="p">,</span> <span class="s1">'BUY'</span><span class="p">,</span> <span class="s1">'IBM'</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">45.00</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">'2006-04-05'</span><span class="p">,</span> <span class="s1">'BUY'</span><span class="p">,</span> <span class="s1">'MSFT'</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">72.00</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">'2006-04-06'</span><span class="p">,</span> <span class="s1">'SELL'</span><span class="p">,</span> <span class="s1">'IBM'</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">53.00</span><span class="p">),</span>
+<span class="n">purchases</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">'2006-03-28'</span><span class="p">,</span> <span class="s1">'BUY'</span><span class="p">,</span> <span class="s1">'IBM'</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">45.00</span><span class="p">],</span>
+            <span class="p">[</span><span class="s1">'2006-04-05'</span><span class="p">,</span> <span class="s1">'BUY'</span><span class="p">,</span> <span class="s1">'MSFT'</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">72.00</span><span class="p">],</span>
+            <span class="p">[</span><span class="s1">'2006-04-06'</span><span class="p">,</span> <span class="s1">'SELL'</span><span class="p">,</span> <span class="s1">'IBM'</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">53.00</span><span class="p">],</span>
         <span class="p">]</span>
 <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s1">'INSERT INTO stocks VALUES (?,?,?,?,?)'</span><span class="p">,</span> <span class="n">purchases</span><span class="p">)</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
@@ -1054,7 +1055,11 @@ Table cells reference is "A9":
 </ul>
 </li>
 </ul>
-<p>While in an ideal world, back tracking could be used so as not to recompute an entire schedule after a new assertion is made, the details of implementation would be very complex, and the reduction in computation time and energy would likely not be worth it, so we'll forgo that for now.</p>
+<h4 id="Back-Tracking">
+<a class="anchor" href="#Back-Tracking" aria-hidden="true"><span class="octicon octicon-link"></span></a>Back Tracking<a class="anchor-link" href="#Back-Tracking"> </a>
+</h4>
+<p>While in an ideal world, back tracking could be used so as not to recompute an entire schedule after a new assertion is made, the details of implementation would be very complex, and my initial assumption is that the reduction in computation time and energy would likely not be worth it, so we'll forgo that for now.</p>
+<p><em>Sneak peek</em>, I'm coming back to this statement days later after programming it and thinking about it a fair deal... my conceptualization now is that back trakcing may in back be entirely necessary to construct the optimal schedule (i.e. one with the least forcing, ehre maximal number of people get voluntary overtime). The version 1 that I'm constructing is essentially a depth first search, without defined decision criteria to facilitate backtracking. The matter of defining how to backtrack is not a simple matter. In a sequence of many nodes, how does one select the origin node to make a different decision at? And if a node is chosen, how does one choose which alternative decision to make, generating the next node? My initial thoughts are that, for the former question, the answer should be that when a given position is identified as requiring forcing, one should look back to the first decision where someone was assigned to something else when they could've been assigned to that slot, make that alternative assignment, and then see what bears out using the same algorithm from there. Of course, one issue with this is that the end result may be less optimal and you really woulnd't know until you compute it all out. Does it reliably get worse, better, or fluctuate between better and worse if this recursive function continues? Or instead of recursing do you return to your original backtrack, and select a different decision node to try a different path from? As one can see, there are many decisions to make when designing a back tracking algorithm for which an optimal decision isn't obvious at all. For that reason, I'm going to stick to V1 without back tracking for the sake of getting a working prototype up and running instead of spending my whole life on the thought treadmill. If I'm lucky, it works well enough where the human reviewer need only make a couple of changes. The funny thing about this use case is that from the optimization purists perspective this algorithm design is a nasty, horrible mess. From the realists side, good enough may very well be within reach! Time to let go of my purism.</p>
 <h4 id="V1">
 <a class="anchor" href="#V1" aria-hidden="true"><span class="octicon octicon-link"></span></a>V1<a class="anchor-link" href="#V1"> </a>
 </h4>
@@ -1145,29 +1150,31 @@ Worker A is interested in working an 8 hour shift between 7a and 7p and their pr
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">CollectData</span><span class="p">():</span>
     <span class="n">pullTables</span><span class="p">()</span>  <span class="c1"># Per code in above sections</span>
     <span class="n">configData</span><span class="p">()</span>  <span class="c1"># Define timeslots objects, worker objects, collections of workers per shift/type</span>
-<span class="n">S</span><span class="o">=</span><span class="n">Sched</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
-<span class="n">Sched</span><span class="o">.</span><span class="n">preFill</span><span class="p">()</span> <span class="c1"># Iterate through &amp; enact prescribed assignments</span>
-<span class="n">Sched</span><span class="o">.</span><span class="n">VolunteerFill</span><span class="p">():</span>
-    <span class="k">for</span> <span class="n">eeTypePool</span> <span class="ow">in</span> <span class="p">(</span><span class="n">onShiftFT</span><span class="p">,</span><span class="n">offShiftFT</span><span class="p">,</span><span class="n">onShiftTemp</span><span class="p">,</span><span class="n">offShiftTemp</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">shift</span> <span class="ow">in</span> <span class="n">shiftSet</span><span class="p">:</span> <span class="c1">#shiftSet is built based on what days selected to schedule. Always seq last to first.</span>
-            <span class="n">namePool</span><span class="o">=</span><span class="n">poolPicker</span><span class="p">(</span><span class="n">shift</span><span class="p">,</span><span class="n">eeTypePool</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">namePool</span><span class="p">:</span> <span class="c1">#Idea: Define a generator function to yield the next person, across ee categories</span>
-                <span class="n">slotPool</span><span class="o">=</span><span class="n">filterSlots</span><span class="p">:</span> <span class="c1">#per sequence above, evaluate each criteria in sequence and remove slot from pool if fails any criteria</span>
-                    <span class="n">isTrained</span><span class="p">,</span> <span class="n">Volunteered</span><span class="p">,</span> <span class="n">shiftGapOK</span><span class="p">,</span> <span class="n">wklyTotOK</span><span class="p">,</span> <span class="n">maxShiftLenOK</span>
-                <span class="k">if</span> <span class="n">poolEmpty</span><span class="p">:</span> <span class="nb">next</span> <span class="n">person</span>
-                <span class="n">s</span><span class="o">=</span><span class="n">pickSlot</span> <span class="c1">#Most constrained slot (if *only* person avail for off-shift, assign there. If only person for multiple, assign first chronological. If candidates&gt;1, take most constrained on-shift slot. If tied, take first chronological) </span>
-                <span class="n">assignSlot</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="n">voluntary</span><span class="p">)</span> <span class="c1">#Perform necessary functions i.e. removing tally of op from no-longer compatible shifts.</span>
-<span class="n">Sched</span><span class="o">.</span><span class="n">forceFill</span><span class="p">():</span>
-    <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="n">Sched</span><span class="o">.</span><span class="n">unassigned</span><span class="o">.</span><span class="n">chronologicalSeq</span><span class="p">:</span>
-        <span class="n">assignee</span><span class="o">=</span><span class="n">lowMan</span><span class="p">(</span><span class="n">slot</span><span class="p">):</span>
-                    <span class="nb">filter</span> <span class="nb">all</span> <span class="n">ee</span> <span class="k">for</span> <span class="n">training</span><span class="p">,</span> <span class="n">sort</span> <span class="n">seniority</span> <span class="n">low</span><span class="o">-</span><span class="n">hi</span><span class="p">,</span> <span class="n">check</span> <span class="k">if</span> <span class="n">already</span> <span class="n">worked</span> <span class="mi">8</span><span class="o">+</span> <span class="n">hours</span><span class="p">,</span> <span class="n">check</span> <span class="k">if</span> <span class="n">already</span> <span class="n">forced</span> <span class="mi">8</span> <span class="n">hours</span>
-        <span class="c1">#if no assignee, flag slot as 'no staff'</span>
-        <span class="n">result</span><span class="o">=</span><span class="n">unassignAsNecessary</span><span class="p">(</span><span class="n">assignee</span><span class="p">,</span><span class="n">slot</span><span class="p">)</span>
-                    <span class="n">check</span> <span class="k">if</span> <span class="n">the</span> <span class="n">forcing</span> <span class="n">would</span> <span class="n">conflict</span> <span class="k">with</span> <span class="n">other</span> <span class="n">constraint</span> <span class="p">(</span><span class="n">inter</span><span class="o">-</span><span class="n">shift</span> <span class="n">gap</span><span class="p">,</span> <span class="n">weekly</span> <span class="n">total</span> <span class="n">hrs</span><span class="p">,</span> <span class="n">shiftduration</span><span class="p">,</span> <span class="n">etc</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">the</span> <span class="n">conflicting</span> <span class="n">slot</span> <span class="n">requiring</span> <span class="n">unassignment</span> <span class="ow">is</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">assertion</span> <span class="nb">list</span><span class="p">,</span> <span class="n">then</span> <span class="k">return</span> <span class="n">an</span> <span class="n">error</span> <span class="n">flag</span> <span class="k">for</span> <span class="n">printout</span>
-        <span class="n">assignSlot</span><span class="p">(</span><span class="n">slot</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="n">forced</span><span class="p">)</span>
-<span class="c1">#Following forcing, some slots may be available if staff were unassigned from slots due to total hour limits triggered by forcing.</span>
-<span class="c1">#Followup with the s</span>
+<span class="n">Schd</span><span class="o">=</span><span class="n">Sched</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+<span class="n">Schd</span><span class="o">.</span><span class="n">preFill</span><span class="p">()</span> <span class="c1"># Iterate through &amp; enact prescribed assignments</span>
+<span class="n">numLoop</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">while</span> <span class="n">Schd</span><span class="o">.</span><span class="n">openSlots</span><span class="o">.</span><span class="n">count</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span> <span class="c1">#Because forcing can open someone up for voluntary, need to make this looping capacity. Tracker bit prevents inf loop</span>
+    <span class="n">numLoop</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="n">Schd</span><span class="o">.</span><span class="n">VolunteerFill</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">eeTypePool</span> <span class="ow">in</span> <span class="p">(</span><span class="n">onShiftFT</span><span class="p">,</span><span class="n">offShiftFT</span><span class="p">,</span><span class="n">onShiftTemp</span><span class="p">,</span><span class="n">offShiftTemp</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">shift</span> <span class="ow">in</span> <span class="n">shiftSet</span><span class="p">:</span> <span class="c1">#shiftSet is built based on what days selected to schedule. Always seq last to first.</span>
+                <span class="n">namePool</span><span class="o">=</span><span class="n">poolPicker</span><span class="p">(</span><span class="n">shift</span><span class="p">,</span><span class="n">eeTypePool</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">namePool</span><span class="p">:</span> <span class="c1">#Idea: Define a generator function to yield the next person, across ee categories</span>
+                    <span class="n">slotPool</span><span class="o">=</span><span class="n">filterSlots</span><span class="p">:</span> <span class="c1">#per sequence above, evaluate each criteria in sequence and remove slot from pool if fails any criteria</span>
+                        <span class="n">isTrained</span><span class="p">,</span> <span class="n">Volunteered</span><span class="p">,</span> <span class="n">shiftGapOK</span><span class="p">,</span> <span class="n">wklyTotOK</span><span class="p">,</span> <span class="n">maxShiftLenOK</span>
+                    <span class="k">if</span> <span class="n">poolEmpty</span><span class="p">:</span> <span class="nb">next</span> <span class="n">person</span>
+                    <span class="n">s</span><span class="o">=</span><span class="n">pickSlot</span> <span class="c1">#Most constrained slot (if *only* person avail for off-shift, assign there. If only person for multiple, assign first chronological. If candidates&gt;1, take most constrained on-shift slot. If tied, take first chronological) </span>
+                    <span class="n">assignSlot</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="n">voluntary</span><span class="p">)</span> <span class="c1">#Perform necessary functions i.e. removing tally of op from no-longer compatible shifts.</span>
+    <span class="n">Schd</span><span class="o">.</span><span class="n">forceFill</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="n">Sched</span><span class="o">.</span><span class="n">unassigned</span><span class="o">.</span><span class="n">chronologicalSeq</span><span class="p">:</span>
+            <span class="n">assignee</span><span class="o">=</span><span class="n">lowMan</span><span class="p">(</span><span class="n">slot</span><span class="p">):</span>
+                        <span class="nb">filter</span> <span class="nb">all</span> <span class="n">ee</span> <span class="k">for</span> <span class="n">training</span><span class="p">,</span> <span class="n">sort</span> <span class="n">seniority</span> <span class="n">low</span><span class="o">-</span><span class="n">hi</span><span class="p">,</span> <span class="n">check</span> <span class="k">if</span> <span class="n">already</span> <span class="n">worked</span> <span class="mi">8</span><span class="o">+</span> <span class="n">hours</span><span class="p">,</span> <span class="n">check</span> <span class="k">if</span> <span class="n">already</span> <span class="n">forced</span> <span class="mi">8</span> <span class="n">hours</span>
+            <span class="c1">#if no assignee, flag slot as 'no staff'</span>
+            <span class="n">result</span><span class="o">=</span><span class="n">unassignAsNecessary</span><span class="p">(</span><span class="n">assignee</span><span class="p">,</span><span class="n">slot</span><span class="p">)</span>
+                        <span class="n">check</span> <span class="k">if</span> <span class="n">the</span> <span class="n">forcing</span> <span class="n">would</span> <span class="n">conflict</span> <span class="k">with</span> <span class="n">other</span> <span class="n">constraint</span> <span class="p">(</span><span class="n">inter</span><span class="o">-</span><span class="n">shift</span> <span class="n">gap</span><span class="p">,</span> <span class="n">weekly</span> <span class="n">total</span> <span class="n">hrs</span><span class="p">,</span> <span class="n">shiftduration</span><span class="p">,</span> <span class="n">etc</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">the</span> <span class="n">conflicting</span> <span class="n">slot</span> <span class="n">requiring</span> <span class="n">unassignment</span> <span class="ow">is</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">assertion</span> <span class="nb">list</span><span class="p">,</span> <span class="n">then</span> <span class="k">return</span> <span class="n">an</span> <span class="n">error</span> <span class="n">flag</span> <span class="k">for</span> <span class="n">printout</span>
+            <span class="n">assignSlot</span><span class="p">(</span><span class="n">slot</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="n">forced</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">numLoop</span><span class="o">&gt;</span><span class="mi">5</span><span class="p">:</span> <span class="k">break</span>
 </pre></div>
 
     </div>
@@ -1202,9 +1209,7 @@ Worker A is interested in working an 8 hour shift between 7a and 7p and their pr
         <span class="bp">self</span><span class="o">.</span><span class="n">trnNm</span><span class="o">=</span><span class="n">trnNm</span> <span class="c1">#to be used when filtering out staff for training</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dispNm</span><span class="o">=</span><span class="n">dispNm</span> <span class="c1">#to be used for printouts</span>
         <span class="c1">#self.datetime=   #Determined based on seq. Used in printout of assignments</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eeid</span><span class="o">=</span><span class="kc">None</span> <span class="c1">#To store eeid of assignee for printout</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sLen</span>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assignee</span><span class="o">=</span><span class="kc">None</span> <span class="c1">#To store eeid of assignee for printout</span>
 </pre></div>
 
     </div>
