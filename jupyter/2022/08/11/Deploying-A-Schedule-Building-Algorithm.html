@@ -82,7 +82,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      29 min read
+      28 min read
     
 </span></p>
 
@@ -303,7 +303,6 @@ window.onload = wrap_img;
     <span class="n">ref</span><span class="o">=</span><span class="n">tab</span><span class="o">.</span><span class="n">ref</span> <span class="c1">#Pull cell reference to string for display</span>
     <span class="n">tab</span><span class="o">=</span><span class="p">[[</span><span class="n">x</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">ws</span><span class="p">[</span><span class="n">tab</span><span class="o">.</span><span class="n">ref</span><span class="p">]]</span> <span class="c1">#Convert to list of lists (each sublist as row of excel table)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span> <span class="c1">#Convert nested lists to Dataframe</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Table cells reference is "'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span><span class="o">+</span><span class="s1">'":'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">tbl_to_df</span><span class="p">(</span><span class="n">tab</span><span class="p">))</span>
 </pre></div>
 
@@ -317,8 +316,7 @@ window.onload = wrap_img;
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Table cells reference is "A9":
-         0        1        2
+<pre>         0        1        2
 0  myHead1  myHead2  myHead3
 1        1        a        .
 2        2        b        ,
