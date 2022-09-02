@@ -82,7 +82,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      28 min read
+      30 min read
     
 </span></p>
 
@@ -152,6 +152,7 @@ window.onload = wrap_img;
 </ul>
 </li>
 <li class="toc-entry toc-h3"><a href="#Data-Structure">Data Structure </a></li>
+<li class="toc-entry toc-h3"><a href="#Optimal-vs-Proven?">Optimal vs Proven? </a></li>
 </ul>
 </li>
 </ul>
@@ -1182,41 +1183,17 @@ Worker A is interested in working an 8 hour shift between 7a and 7p and their pr
 </div>
     
 
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Schedule</span><span class="p">():</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">slots</span><span class="p">):</span>
-        <span class="c1">#self.Slots=   #A collection of Slot objects that compose this schedule</span>
-        <span class="k">pass</span>
-    <span class="k">def</span> <span class="nf">opnSlt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""Returns a collection of all unassigned slots in this schedule,"""</span>
-        <span class="k">pass</span>
-
-    <span class="k">def</span> <span class="nf">preFill</span><span class="p">():</span>
-        <span class="sd">"""Enter all predefined assignments into the schedule"""</span>
-        
-
-<span class="k">class</span> <span class="nc">Slot</span><span class="p">():</span>
-    <span class="sd">"""A single 4 hour time slot for a single job, to be filled by 1 person"""</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">seq</span><span class="p">,</span><span class="n">dispNm</span><span class="p">,</span><span class="n">trnNm</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trnNm</span><span class="o">=</span><span class="n">trnNm</span> <span class="c1">#to be used when filtering out staff for training</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dispNm</span><span class="o">=</span><span class="n">dispNm</span> <span class="c1">#to be used for printouts</span>
-        <span class="c1">#self.datetime=   #Determined based on seq. Used in printout of assignments</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assignee</span><span class="o">=</span><span class="kc">None</span> <span class="c1">#To store eeid of assignee for printout</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Optimal-vs-Proven?">
+<a class="anchor" href="#Optimal-vs-Proven?" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optimal vs Proven?<a class="anchor-link" href="#Optimal-vs-Proven?"> </a>
+</h3>
+<p>The algorithm explored above is my attempt at making explicit the process carried out by the human schedulers at present. This method hinges on scheduling one shift at a time with the priority selection staff for that shift, then proceeding to lass with less priority. The thing is, I <em>know</em> I want my first version not to support solution tree exploration (backtracking and testing of different assignments). And trying to emulate that human method is sticky as hell because it really does demand that each stage, a check be made so that, even if someone might've had indicated willingness for a slot they had priority for, they <em>need</em> to be assigned to a slot if they are the only willing assignee for it.. Incorporating this pre-check just feels so janky to me in the scheme as it is presented above. So I'm thinking that that's because it's wrong to go about it that way. I'm going to make the assignment algorithm assign opposite from how schedulers do it, by assigning staff to slots in the sequence of which slot is most constrained, as opposed to assigning slots to staff in the sequence of who has priority pick. And I think this will work just fine because the means by which staff will be selected for assignment to a slot will follow their priority sequence. As postulated previously, it will take implementing and testing to prove that this will work and in fact be better than the alternative w.r.t minimizing overall forcing. But I wouldn't be surprised if, in the grand scheme, this leads to scheudles that are qualitatively different from ones human might make (for example, having a single person scheduled on different jobs across their shift when they could've stayed on the same one because they were interchangeable with the person on the other slot.)</p>
 
 </div>
-    
-
+</div>
+</div>
 </div>
 
 
