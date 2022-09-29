@@ -82,7 +82,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      48 min read
+      50 min read
     
 </span></p>
 
@@ -162,6 +162,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#Success-Sort-of---Sept-19">Success Sort of - Sept 19 </a></li>
 <li class="toc-entry toc-h3"><a href="#Progress,-Surely---Sept-26">Progress, Surely - Sept 26 </a></li>
 <li class="toc-entry toc-h3"><a href="#Could-This-Be-It?---Sept-27">Could This Be It? - Sept 27 </a></li>
+<li class="toc-entry toc-h3"><a href="#Adjustments-Required---Sep-29-2022">Adjustments Required - Sep 29 2022 </a></li>
 </ul>
 </li>
 </ul>
@@ -1357,6 +1358,17 @@ Worker A is interested in working an 8 hour shift between 7a and 7p and their pr
 <p>A more interesting problem was that when I put a specified assignment in the assignment list, it was being implemented but at the same time, not... the persons other slot indicated 2/2, implying the other job was there, and the slot was present in the employee object assignment list, but the slot was assigned someone else. It turns out what was happening here was that when the list of slots to assign to is initially defined, it only omitted slots with 'DNS' or 'WWF' assignment, when it shoukld've included 'V' and 'F' as well for those cases where those assignments were pre assigned in the assignment list. Since that was missing, the assignments were made but then the slots were re assigned (overwriting slot info but not original assignee info) resulting in the bug.</p>
 <p>.....</p>
 <p>And.. I've reviewed the real life version and the automatic version, and that's it! They aren't a perfect match, but for every different assignment, the automatic version is what it should be based strictly on the input data. The remaining differences I put down to human judgement or people changing their minds about working after the fact not being reflected in the polling sheet. Success!</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Adjustments-Required---Sep-29-2022">
+<a class="anchor" href="#Adjustments-Required---Sep-29-2022" aria-hidden="true"><span class="octicon octicon-link"></span></a>Adjustments Required - Sep 29 2022<a class="anchor-link" href="#Adjustments-Required---Sep-29-2022"> </a>
+</h3>
+<p>After review with the team, identified issue that it needs to give precedence to someone who wants 8 hours, even if they are lower in the selection sequence than someone who wants 4 hours. The problem I stopped at when trying to do this in earlier versions was that it became very complicated when choosing to explore neighbours to the left or right (slots chronologically before or after). Its further complicated by the issue of shift-selection precedence and the possiblity of someone taking an 8 hour shift straddling two shift periods, meaning the sequence of priority selection is different across those slots. The solution we came to is a slight injury to my pride, but I can live with that. That's because it is in fact a return to what I originally said could not be, which is assigning the slots the way the people working the process do it currently. Which is to tierate through the 3 shifts of the day, and iterate through the priority selection sequence assigning people the slots they want. But first to do that only for people who want full 8 hour slots on the shift they were scheduled for this past week. What this does is essentially take away one part of that 'which side to explore' question. By immediately assigning 8 hour shifts within the defined night, day, and afternoon shift periods to anyone who is eligible (chosen in priority sequence), then slots that are unassigned going into the next phase can only become a aprt of an 8 hour shift if they become one half of a straddled shift. That makes it only a one way search, much easier. So this can be iterated upon to identify all straddled 8 hour shifts, or necessarily any 12 hour shift. Finally, any slot that remains unassigned is open to 4 hour assignments. Time to implement</p>
 
 </div>
 </div>
