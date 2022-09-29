@@ -82,7 +82,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      45 min read
+      48 min read
     
 </span></p>
 
@@ -161,6 +161,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#Developments-Sept-17-/22">Developments Sept 17 /22 </a></li>
 <li class="toc-entry toc-h3"><a href="#Success-Sort-of---Sept-19">Success Sort of - Sept 19 </a></li>
 <li class="toc-entry toc-h3"><a href="#Progress,-Surely---Sept-26">Progress, Surely - Sept 26 </a></li>
+<li class="toc-entry toc-h3"><a href="#Could-This-Be-It?---Sept-27">Could This Be It? - Sept 27 </a></li>
 </ul>
 </li>
 </ul>
@@ -1340,6 +1341,22 @@ Worker A is interested in working an 8 hour shift between 7a and 7p and their pr
 <a class="anchor" href="#Progress,-Surely---Sept-26" aria-hidden="true"><span class="octicon octicon-link"></span></a>Progress, Surely - Sept 26<a class="anchor-link" href="#Progress,-Surely---Sept-26"> </a>
 </h3>
 <p>I got that working later that same night. The next week, I trialled it using the previous weeks weekend data but... I was sunk by the edge cases of it. That week was a real gong show of peculiarities in the schedule. Trying again this week and the results are promising but not perfect. I'm seeing people being forced in for 12 hours, people forced who are on long term leave, and it failed to assign someone for 12 even though they were willing, forcing in lieu. The long term leave thing is a simple fix, but the forcing and failure to assign 12 hours is a bit of a mystery</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Could-This-Be-It?---Sept-27">
+<a class="anchor" href="#Could-This-Be-It?---Sept-27" aria-hidden="true"><span class="octicon octicon-link"></span></a>Could This Be It? - Sept 27<a class="anchor-link" href="#Could-This-Be-It?---Sept-27"> </a>
+</h3>
+<p>Fixing people on long term leave was easy but still a nice classic little exercise in a quick and dirty way appearing to work but not really, or an equally quick way that really worked. The former I tried first was to not define an employee if their crew wasn't one of the accepted values. Rapidly hit some snags such as a variety of unexpected values, and errors being thrown when the ee object wasn't created for someone who was on WWF list who I failed to mark as inactive due to vacation. The better way was to add a new check on the 'slotOK' check function to see if the persons crew is valid. This way all ee objects are still made so there aren't any errors thrown when trying to reference one that will ultimately be invalid.</p>
+<p>The matter of people being forced in for 12 hours was simply because I had forgotten to select '40 hour week' instead of '32' and so people were forcable for up to 16 hours to take them to 48 total in the week. The 'failing to assign, forcing in lieu' was a misread on my part as there were valid rules being followed that prevented that eprson from being eligible though they were volunteering.</p>
+<p>I encountered some other interesting issues when troubleshooting such as identifying a situation where someone was absent for multiple days in the weekk, but did OT on the other days. Since the sheet isn't given sick hours, it made it seem that the person wasn't forcable (past 48 hours) but really they weren't. Until/unless that capability gets built in, forcings would always have to be double checked.</p>
+<p>A more interesting problem was that when I put a specified assignment in the assignment list, it was being implemented but at the same time, not... the persons other slot indicated 2/2, implying the other job was there, and the slot was present in the employee object assignment list, but the slot was assigned someone else. It turns out what was happening here was that when the list of slots to assign to is initially defined, it only omitted slots with 'DNS' or 'WWF' assignment, when it shoukld've included 'V' and 'F' as well for those cases where those assignments were pre assigned in the assignment list. Since that was missing, the assignments were made but then the slots were re assigned (overwriting slot info but not original assignee info) resulting in the bug.</p>
+<p>.....</p>
+<p>And.. I've reviewed the real life version and the automatic version, and that's it! They aren't a perfect match, but for every different assignment, the automatic version is what it should be based strictly on the input data. The remaining differences I put down to human judgement or people changing their minds about working after the fact not being reflected in the polling sheet. Success!</p>
 
 </div>
 </div>
