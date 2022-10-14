@@ -82,7 +82,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      53 min read
+      57 min read
     
 </span></p>
 
@@ -164,7 +164,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#Could-This-Be-It?---Sept-27">Could This Be It? - Sept 27 </a></li>
 <li class="toc-entry toc-h3"><a href="#Adjustments-Required---Sep-29-2022">Adjustments Required - Sep 29 2022 </a></li>
 <li class="toc-entry toc-h3"><a href="#Painful---Sep-29-2022">Painful - Sep 29 2022 </a></li>
-<li class="toc-entry toc-h3"><a href="#Painful---Sep-29-2022">Painful - Sep 29 2022 </a></li>
+<li class="toc-entry toc-h3"><a href="#The-Promised-Land---Oct-13-2022">The Promised Land - Oct 13 2022 </a></li>
 </ul>
 </li>
 </ul>
@@ -1408,10 +1408,32 @@ Few hours later. Good progress. I' am for once implementing the ebst practice of
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Painful---Sep-29-2022">
-<a class="anchor" href="#Painful---Sep-29-2022" aria-hidden="true"><span class="octicon octicon-link"></span></a>Painful - Sep 29 2022<a class="anchor-link" href="#Painful---Sep-29-2022"> </a>
+<h3 id="The-Promised-Land---Oct-13-2022">
+<a class="anchor" href="#The-Promised-Land---Oct-13-2022" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Promised Land - Oct 13 2022<a class="anchor-link" href="#The-Promised-Land---Oct-13-2022"> </a>
 </h3>
-<p>It was on Oct 6, last Thursday, that I finally slaid that beast of the scheduling program. Coming back to it now to finish off this post and mention closing thoughts/details/lessons learned. The main thing, believe you me, is that I am a fool. In truth, I <em>PRESUMED</em> and that led me astray. I recalled tha tMIT AI lecture in which the prof demonstrated a greedy algorithm to solve constrained assignment problems, and from that faint, 2 year old emmory, I dared to presume that - yes - I was right. I knew the way, the best way, the way it <em>should</em> be done, and that the way it <em>was</em> being done was wrong, and no one knew but me, and that was that. Well I think any practitioner of change management and programming could tell you that that was laughable! It's usually done the way it is for a reason. I was right, based on the assumptions I was making, but in the grand scheme of things, I was so wrong because the truth is that I was making some simplifying assumptions because it suited me. The killer mistake was omitting the requirement/constraint that 8 hour shifts took preference over 4 hour shifts, superseding the shift-selection-priority clause. Yes, flipping the script to assign people to slots instead of slots to people was a great idea! But the issue, as explored in earlier blog sections, was that it was</p>
+<p>It was on Oct 6, last Thursday, that I finally slaid that beast of the scheduling program. Coming back to it now to finish off this post and mention closing thoughts/details/lessons learned. The main thing, believe you me, is that I am a fool. In truth, I <em>PRESUMED</em> and that led me astray. I recalled tha tMIT AI lecture in which the prof demonstrated a greedy algorithm to solve constrained assignment problems, and from that faint, 2 year old emmory, I dared to presume that - yes - I was right. I knew the way, the best way, the way it <em>should</em> be done, and that the way it <em>was</em> being done was wrong, and no one knew but me, and that was that. Well I think any practitioner of change management and programming could tell you that that was laughable! It's usually done the way it is for a reason. I was right, based on the assumptions I was making, but in the grand scheme of things, I was so wrong because the truth is that I was making some simplifying assumptions because it suited me. The killer mistake was omitting the requirement/constraint that 8 hour shifts took preference over 4 hour shifts, superseding the shift-selection-priority clause. Yes, flipping the script to assign people to slots instead of slots to people was a great idea! But the issue, as explored in earlier blog sections, was that by proceeding in this way (1 slot at a time), it couldn't account for the possibility of someone with lower precedence winning the slot because they took 8 hours. And I was all hung up on making it ha[en in 8 hour chunks because of the question 'how do you handle the possible 8 hour assignable period straddling 2 regularly scheduled shifts?' A chicken or egg problem, as the taking of an regularly scheduled 8 hour shift would inform the possibility of one of the halves being available for a straddle shift, while you could say the same about the reverse.</p>
+<p>In the end, I just let go of my pride and did it the way its always been done, instantiated in the code. Because (who guessed it) that's the way it has to be done. So the final process is as follows:</p>
+<ul>
+<li>Assign, forcing if necessary, all slots in the priority list, in chronological order, that list being initialized in the first iteration as all slots with no volunteers</li>
+<li>Look at every possible 8 hour block on regularly scheduled shift times and fill them in with eligible volunteers as they are found.<ul>
+<li>Iterating through 1st half + 2nd half possibilities in sequence of most constrained slots. (constraint measured by measure of eligible volunteers)</li>
+<li>Look through all options for Sunday, then Friday, then Saturday, then Monday.</li>
+</ul>
+</li>
+<li>Look at every possible 8 hour block straddling regularly scheduled shift times and fill them in with eligible volunteers as they are found.<ul>
+<li>Iterating through 1st half + 2nd half possibilities in sequence of most constrained slots. (constraint measured by measure of eligible volunteers)</li>
+<li>Look through all options for Sunday, then Friday, then Saturday, then Monday.</li>
+<li>In terms of who gets first pick at straddled shift, it goes to the crew the first half falls on for first pick, then the crew 2nd half falls on, then the third crew. </li>
+</ul>
+</li>
+<li>Finally, once all these are done, proceed with <em>'el classico David especiale'</em> assigning 4 hour slots one at a time, one full day at a time in order of previously mentioned day preference, and then in order of most to least constrained. </li>
+<li>If at any time, an assignment results in another slot having no more eligible volunteers, or a broken forcing rule (eg. someone was forced in phase 1, then voluntarily assigned to an earlier slot, meaning they put in voluntary time, disallowing them from being forced afterwards), then add those slots that were broke to the priority list for assignment, forced or otherwise in phase 1, and restart the entire process.<ul>
+<li>Since 8 hour assignments cannot be checked when evaluating one slot at a time, but the slots are evaluated one at a time in the forcing phase, there is a built in 8 hour assignment tracker such that in first phase, when a slot is encountered on the priority list for which an 8 hour assignment was previously made, that assignment is made again in that initial phase so long as it doesn't break key rules for the previously identified assignee. An example of when the same assignment woudln't be made is if that person was now forced into a prior slot, and the 8 hour assignment isn't viable for example because there is too short of a shift gap between the forcing and 8 hour assignment, or the forcing coincides with the 8 hour assignment but for a different job, etc.</li>
+</ul>
+</li>
+</ul>
+<p>There were also a number of other significant upgrades made in that final week, such as the ability to schedule in weekender crew according to the usual rules. Previously I just had all their assignments hard coded in via the assignment list. But for long weekend, I made it so that by selecting one input or another, weekenders could be assigned overtime (above their 12+12) following the same rules as all the others, and including them in the correct priority sequence of selection for any given slot etc. I also finally fixed the assignemnt logging function, which had been mostly broken for mostly all of the development process, and enhanced the supplementary data printout functions on the secondary tabs, including that log in the printout to inform why decisions were made as they were throughout the assignment process so that this algorithm was completely transparent.</p>
+<p>And to my great chagrin it finally worked very well on the Thanksgiving long weekend test case, for which I am most grateful after my long trials and tribulations. Now a couple more weeks of test cases/proof testing and training up and sharing with the team and I should be able to wash my hands of this.</p>
 
 </div>
 </div>
