@@ -82,7 +82,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      57 min read
+      58 min read
     
 </span></p>
 
@@ -165,6 +165,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#Adjustments-Required---Sep-29-2022">Adjustments Required - Sep 29 2022 </a></li>
 <li class="toc-entry toc-h3"><a href="#Painful---Sep-29-2022">Painful - Sep 29 2022 </a></li>
 <li class="toc-entry toc-h3"><a href="#The-Promised-Land---Oct-13-2022">The Promised Land - Oct 13 2022 </a></li>
+<li class="toc-entry toc-h3"><a href="#And-It-Gets-Better---Oct-23-2022">And It Gets Better - Oct 23 2022 </a></li>
 </ul>
 </li>
 </ul>
@@ -1434,6 +1435,17 @@ Few hours later. Good progress. I' am for once implementing the ebst practice of
 </ul>
 <p>There were also a number of other significant upgrades made in that final week, such as the ability to schedule in weekender crew according to the usual rules. Previously I just had all their assignments hard coded in via the assignment list. But for long weekend, I made it so that by selecting one input or another, weekenders could be assigned overtime (above their 12+12) following the same rules as all the others, and including them in the correct priority sequence of selection for any given slot etc. I also finally fixed the assignemnt logging function, which had been mostly broken for mostly all of the development process, and enhanced the supplementary data printout functions on the secondary tabs, including that log in the printout to inform why decisions were made as they were throughout the assignment process so that this algorithm was completely transparent.</p>
 <p>And to my great chagrin it finally worked very well on the Thanksgiving long weekend test case, for which I am most grateful after my long trials and tribulations. Now a couple more weeks of test cases/proof testing and training up and sharing with the team and I should be able to wash my hands of this.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="And-It-Gets-Better---Oct-23-2022">
+<a class="anchor" href="#And-It-Gets-Better---Oct-23-2022" aria-hidden="true"><span class="octicon octicon-link"></span></a>And It Gets Better - Oct 23 2022<a class="anchor-link" href="#And-It-Gets-Better---Oct-23-2022"> </a>
+</h3>
+<p>Basically using this project as a test case to learn how to implement a nice 'Blocks' type interface within HFS Gradio. Grea tool, and its working well. Over the last couple weeks I've been taking it real light on this project, but I'm very close to the end now. I got a function going which converts visual schedule templates to the 'assignment list' type format that the program uses to build the actual schedule. This is super duper handy because just for proof-testing my code, I was spending hours converting the visual-templates (the norm for real curent process) to this explicit list type of input. So now that's automated meaning there is truly zero friction for the team with regard to changing existing spreadsheets, which is great. eOnly thing to do now is an exciting quality of life function- to enforce stopping the schedule generation at an arbitrary number of assignments to support troubleshooting and gain insight as to how the thing is working.</p>
 
 </div>
 </div>
